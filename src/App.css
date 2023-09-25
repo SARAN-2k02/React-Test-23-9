@@ -14,10 +14,13 @@ li {
 }
 .datas {
   /* border: 2px solid red; */
+  margin-top: 20px;
   border-radius: 10px;
   background-color: aliceblue;
-  width: 60%;
+  width: 35%;
   margin: auto;
+  position: relative;
+  top: 20px;
 }
 span {
   color: blue;
@@ -37,5 +40,33 @@ input {
   /* border: none; */
   /* border-style: none; */
   height: 25px;
+  /* line-height: 20px; */
   border: 2px solid rgb(231, 121, 121);
+}
+.update-btn {
+  background-color: rgb(76, 76, 242);
+  border-radius: 10px;
+  height: 25px;
+  border-style: none;
+}
+.sub-btn {
+  background-color: rgb(7, 200, 7);
+  border-radius: 10px;
+  height: 25px;
+  border-style: none;
+}
+.edit-btn{
+  background-color: skyblue;
+    border-radius: 10px;
+  height: 24px;
+  border-style: none;
+}
+.dlt-btn{
+  background-color: red;
+    border-radius: 10px;
+  height: 24px;
+  border-style: none;
+}
+.id{
+ color: brown;
 }

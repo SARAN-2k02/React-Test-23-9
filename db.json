@@ -1,3 +1,14 @@
 {
-  "posts": []
+  "posts": [
+    {
+      "title": "saran",
+      "body": "sdasda",
+      "id": 1
+    },
+    {
+      "title": "dva",
+      "body": "jdbfedb",
+      "id": 2
+    }
+  ]
 }

@@ -120,9 +120,9 @@ function App() {
             ></input>
           </div>
           {button ? (
-            <button onClick={handleUpdate}>Update</button>
+            <button className="update-btn" onClick={handleUpdate}>Update</button>
           ) : (
-            <button onClick={handleAdd}>Submit</button>
+            <button className="sub-btn"  onClick={handleAdd}>Submit</button>
           )}
         </form>
       </div>
@@ -131,13 +131,14 @@ function App() {
         <div className="datas">
           {data.map((item, index) => (
             <>
-              <small key={index}> ID: {item.id}</small>
+              <small className="id" key={index}> ID: {item.id}</small>
+             
               <p key={item.id}>
                 Title : <span>{item.title}</span>
               </p>
               <h5>Body : {item.body}</h5>
-              <button onClick={() => handleEdit(item)}>Edit</button>
-              <button onClick={() => handleDelete(item.id)}>Delete</button>
+              <button className="edit-btn" onClick={() => handleEdit(item)}>Edit</button>
+              <button className="dlt-btn" onClick={() => handleDelete(item.id)}>Delete</button>
             </>
           ))}
         </div>
