@@ -5,10 +5,17 @@ import "./App.css";
 function App() {
   const [data, setData] = useState([]);
 
-  const [users, setUsers] = useState({
-    title: "",
-    body: "",
-  });
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [button, setButton] = useState(false);
+
+  const [editdata, setEditData] = useState();
+
+  // const [users, setUsers] = useState({
+  //   title: "",
+  //   body: "",
+  // });
+
   useEffect(() => {
     axios
       .get("http://localhost:3003/posts")
@@ -21,48 +28,74 @@ function App() {
       });
   }, []);
 
-  function handleChange(e) {
-    const value = e.target.value;
-    setUsers({ ...users, [e.target.name]: value });
-  }
-  // console.log(users);
+  function handleAdd(e) {
+    e.preventDefault();
 
-  function handleSubmit() {
-    // e.preventDefault();
+    const users = {
+      title,
+      body,
+    };
     axios
       .post("http://localhost:3003/posts", users)
       .then((response) => {
-        console.log("POSTED DATA", response.data);
+        axios
+          .get("http://localhost:3003/posts")
+          .then((response) => {
+            console.log("postedd data", response.data);
+            setData(response.data);
+          })
+          .catch((err) => console.log("error in get data", err));
       })
       .catch((err) => console.log("error in post data", err));
 
-    axios
-      .get("http://localhost:3003/posts")
-      .then((response) => {
-        console.log("postedd data", response.data);
-      })
-      .catch((err) => console.log("error in get data", err));
+
+      setTitle("")
+      setBody("")
   }
 
-  function handleUpdate() {
-    // alert("Update");
+  function handleEdit(item) {
+    setTitle(item.title);
+    setBody(item.body);
+
+    setEditData(item);
+
+    setButton(true);
+  }
+
+  function handleUpdate(e) {
+    e.preventDefault();
+    const users = {
+      title,
+      body,
+    };
     axios
-      .post("http://localhost:3003/posts", users)
+      .put(`http://localhost:3003/posts/${editdata.id}`, users)
       .then((response) => {
-        console.log(response.data);
+        axios
+          .get("http://localhost:3003/posts")
+          .then((response) => {
+            console.log("postedd data", response.data);
+            setData(response.data);
+          })
+          .catch((err) => console.log("error in get data", err));
       })
       .catch((err) => console.log("error in posting", err));
   }
-  function handleDelete({ id }) {
-    const deltUser = axios
+  function handleDelete(id) {
+    axios
       .delete(`http://localhost:3003/posts/${id}`)
       .then((response) => {
-        response.data.filter((item) => {
-          console.log(item.id !== id);
-          // return item.id !== id;
-        });
+        console.log("DAta deleted 👍🏻", response.data);
+        setData(data.filter((item) => item.id !== id));
+        console.log(data);
+        axios
+          .get("http://localhost:3003/posts")
+          .then((response) => {
+            setData(response.data);
+          })
+          .catch((err) => console.log("error in deleting", err));
       })
-      .catch((err) => console.log("error", err));
+      .catch((err) => console.log("error fetch dlt data", err));
   }
   return (
     <div className="App">
@@ -73,8 +106,8 @@ function App() {
             <input
               type="text"
               name="title"
-              value={users.title}
-              onChange={handleChange}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
             ></input>
           </div>
           <div>
@@ -82,27 +115,29 @@ function App() {
             <input
               type="text"
               name="body"
-              value={users.body}
-              onChange={handleChange}
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
             ></input>
           </div>
-          <button type="submit" onClick={handleSubmit}>
-            Submit
-          </button>
+          {button ? (
+            <button onClick={handleUpdate}>Update</button>
+          ) : (
+            <button onClick={handleAdd}>Submit</button>
+          )}
         </form>
       </div>
 
       <div>
         <div className="datas">
-          {data.map((item) => (
+          {data.map((item, index) => (
             <>
-              <small> ID: {item.id}</small>
+              <small key={index}> ID: {item.id}</small>
               <p key={item.id}>
                 Title : <span>{item.title}</span>
               </p>
               <h5>Body : {item.body}</h5>
-              <button onClick={handleUpdate}>Update</button>
-              <button onClick={handleDelete}>Delete</button>
+              <button onClick={() => handleEdit(item)}>Edit</button>
+              <button onClick={() => handleDelete(item.id)}>Delete</button>
             </>
           ))}
         </div>
